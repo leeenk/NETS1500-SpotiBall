@@ -46,7 +46,7 @@ public class Graph {
     }
 
     // adds undireced edge to graph between two artists
-    public boolean addEdge(String artist1, String artist2, int weight) {
+    public boolean addEdge(String artist1, String artist2) {
         if (hasEdge(artist1, artist2)) {
             return false;
         }
