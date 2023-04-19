@@ -82,12 +82,14 @@ import java.net.URISyntaxException;
 public class DataCollection {
 
     String startArtist;
+    String endArtist;
     Graph graph;
     int size;
 
     // graph initialized by start artist and how many nodes we want to limit our graph by
-    public DataCollection(String startArtist, int size) {
+    public DataCollection(String startArtist, String endArtist, int size) {
         this.startArtist = startArtist;
+        this.endArtist = endArtist;
         this.graph = new Graph(size);
         this.size = size;
     }
