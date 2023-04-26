@@ -1,4 +1,3 @@
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,7 +15,7 @@ public class Run {
         final JFrame parent = new JFrame();
         JButton button = new JButton();
 
-        button.setText("Click me to show dialog!");
+        button.setText("Welcome to Spotiball! CLick to Begin.");
         parent.add(button);
         parent.pack();
         parent.setVisible(true);
