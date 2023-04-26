@@ -9,8 +9,8 @@ import java.util.List;
 public class Graph {
 
     List<String>[] vertices;
-    // maps artist name to their index in the adjacency list.
-    HashMap<String, Integer> namesToIndex;
+    // maps artist id to their index in the adjacency list.
+    HashMap<String, Integer> IDToIndex;
 
     /**
      * Constructor for graph object.
@@ -26,18 +26,22 @@ public class Graph {
             vertices[i] = new LinkedList<>();
             i++;
         }
-        this.namesToIndex = new HashMap<>();
+        this.IDToIndex = new HashMap<>();
     }
 
-    public void addArtist(String name, int index) {
-        namesToIndex.put(name, index);
+    public void addArtist(String id, int index) {
+        IDToIndex.put(id, index);
+    }
+
+    public boolean containsArtist(String id) {
+        return IDToIndex.containsKey(id);
     }
 
     // helper that checks if an edge exists between two artists so that not double added
     public boolean hasEdge(String artist1, String artist2) {
         // must ensure that both artists already assigned an index
-        Integer u = namesToIndex.get(artist1);
-        Integer v = namesToIndex.get(artist2);
+        Integer u = IDToIndex.get(artist1);
+        Integer v = IDToIndex.get(artist2);
         if (u == null || v == null) {
             throw new IllegalArgumentException("One of inputted artists does not exist in graph.");
         }
@@ -50,8 +54,8 @@ public class Graph {
         if (hasEdge(artist1, artist2)) {
             return false;
         }
-        Integer u = namesToIndex.get(artist1);
-        Integer v = namesToIndex.get(artist2);
+        Integer u = IDToIndex.get(artist1);
+        Integer v = IDToIndex.get(artist2);
         if (u == null || v == null) {
             throw new IllegalArgumentException("One of inputted artists does not exist in graph.");
         } else if (u.equals(v)) {

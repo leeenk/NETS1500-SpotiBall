@@ -10,7 +10,7 @@ public class Run {
 
     // Run BFS with graph, artist1 as source, artist2 as target
 
-    // present list to user (correctly display that no connection exists if returned list is empty)
+    // present list o user (correctly display that no connection exists if returned list is empty)
     public static void main(final String[] args) {
         final JFrame parent = new JFrame();
         JButton button = new JButton();
