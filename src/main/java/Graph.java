@@ -4,13 +4,14 @@ import java.util.List;
 
 /**
  * Contains API for undirected graph.
- * NOTE: add methods necessary for BFS
  */
 public class Graph {
 
     List<String>[] vertices;
-    // maps artist id to their index in the adjacency list.
+    // maps artist id to their index in the adjacency list. data structure may not be necessary
     HashMap<String, Integer> IDToIndex;
+
+    String[] ids;
 
     /**
      * Constructor for graph object.
@@ -27,10 +28,12 @@ public class Graph {
             i++;
         }
         this.IDToIndex = new HashMap<>();
+        this.ids = new String[n];
     }
 
     public void addArtist(String id, int index) {
         IDToIndex.put(id, index);
+        ids[index] = id;
     }
 
     public boolean containsArtist(String id) {
