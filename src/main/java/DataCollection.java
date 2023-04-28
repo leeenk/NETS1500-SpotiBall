@@ -31,11 +31,6 @@ public class DataCollection {
      * @param size The number of nodes/artists we want as an upperbound in our graph.
      */
     public DataCollection(String startArtist, int size) {
-        this.currentArtist = getID(startArtist);
-        this.graph = new Graph(size);
-        this.size = size;
-        this.idToName = new HashMap<>();
-
         ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()
                 .grant_type("client_credentials").build();
         try {
@@ -45,6 +40,10 @@ public class DataCollection {
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
+        this.graph = new Graph(size);
+        this.size = size;
+        this.idToName = new HashMap<>();
+        this.currentArtist = getID(startArtist);
     }
 
     /**
@@ -86,26 +85,38 @@ public class DataCollection {
      * edge representing a track feature (direction of feature disregarded)
      */
     public Graph buildGraph() {
-        Queue<String> queue = new LinkedList<>();
-        queue.add(currentArtist);
-        graph.addArtist(currentArtist, 0);
+        //try {
+            //BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"));
+            Queue<String> queue = new LinkedList<>();
+            queue.add(currentArtist);
+            graph.addArtist(currentArtist, 0);
 
-        int currentIndex = 1;
-        while (currentIndex < size - 1  || !queue.isEmpty()) {
-            currentArtist = queue.poll();
-            Collection<String> albumIDs = getAlbumIDs();
-            for (String albumID : albumIDs) {
-                Collection<String> artistIDs = getArtistIDs(albumID);
-                for (String artist : artistIDs) {
-                    if (! graph.containsArtist(artist) && currentIndex < size) {
-                        graph.addArtist(artist, currentIndex);
-                        currentIndex++;
-                        queue.add(artist);
-                        graph.addEdge(currentArtist, artist);
+            int currentIndex = 1;
+            while (currentIndex < size - 1  || !queue.isEmpty()) {
+                currentArtist = queue.poll();
+                Collection<String> albumIDs = getAlbumIDs();
+                for (String albumID : albumIDs) {
+                    Collection<String> artistIDs = getArtistIDs(albumID);
+                    for (String artist : artistIDs) {
+                        if (! graph.containsArtist(artist) && currentIndex < size) {
+                            graph.addArtist(artist, currentIndex);
+                            currentIndex++;
+                            queue.add(artist);
+                            graph.addEdge(currentArtist, artist);
+                            //writer.write(currentArtist + " " + artist);
+                            //writer.newLine();
+                            //System.out.println(currentArtist + " " + artist);
+                        }
                     }
                 }
             }
-        }
+            //writer.close();
+            //writer.flush();
+
+        //} catch (Exception e) {
+            //System.out.println("No data file found.");
+        //}
+        printGraph();
         writeGraph();
         return graph;
     }
