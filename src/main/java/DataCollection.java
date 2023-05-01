@@ -33,13 +33,15 @@ public class DataCollection {
     public DataCollection(String startArtist, int size) {
         ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()
                 .grant_type("client_credentials").build();
-        try {
-            ClientCredentials clientCredentials = clientCredentialsRequest.execute();
-            String token = clientCredentials.getAccessToken();
-            spotifyApi.setAccessToken(token);
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+//        try {
+//            ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+//            String token = clientCredentials.getAccessToken();
+//            spotifyApi.setAccessToken(token);
+//        } catch (IOException | SpotifyWebApiException | ParseException e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+
+        spotifyApi.setAccessToken("BQDd68JM4EWj2v09AMrlNlLWqcQoxJhbCGD31tY66FEm_WLrj8waVPudCMW_9rfLWUeTxadguyoMgEITc4ZAUf7qsty6kh_ce-L3zI4utI3gA2refR2s");
         this.graph = new Graph(size);
         this.size = size;
         this.idToName = new HashMap<>();
@@ -74,6 +76,33 @@ public class DataCollection {
     }
 
     /**
+     * Finds ID of artist by searching spotify API. First artist found with a matching name
+     * is selected. If no such artist is found, an IllegalArgumentException is thrown.
+     * @param id The id of the artist
+     * @return The id of the artist
+     */
+    String getName(String id) {
+        SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(id).build();
+        String name = "";
+        try {
+            Paging<Artist> artistSimplifiedPaging = searchArtistsRequest.execute();
+            for (Artist artist: artistSimplifiedPaging.getItems()) {
+                if (id.equals(artist.getId())) {
+                    name = artist.getName();
+                    idToName.put(id, name);
+                    break;
+                }
+            }
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        if (name.equals("")) {
+            throw new IllegalArgumentException("Artist id does not match any found artist.");
+        }
+        return name;
+    }
+
+    /**
      * Method uses Spotify API to build graph of artists. Loops through the
      * following until the number of artists discovered reaches the limiting size
      * of the graph: For the current artist, finds all of their albums, all of these
@@ -89,7 +118,7 @@ public class DataCollection {
             //BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"));
             Queue<String> queue = new LinkedList<>();
             queue.add(currentArtist);
-            graph.addArtist(currentArtist, 0);
+            graph.addArtist(currentArtist, 0, getName(currentArtist));
 
             int currentIndex = 1;
             while (currentIndex < size - 1  || !queue.isEmpty()) {
@@ -99,7 +128,7 @@ public class DataCollection {
                     Collection<String> artistIDs = getArtistIDs(albumID);
                     for (String artist : artistIDs) {
                         if (! graph.containsArtist(artist) && currentIndex < size) {
-                            graph.addArtist(artist, currentIndex);
+                            graph.addArtist(artist, currentIndex, getName(artist));
                             currentIndex++;
                             queue.add(artist);
                             graph.addEdge(currentArtist, artist);
