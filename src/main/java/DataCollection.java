@@ -216,10 +216,10 @@ public class DataCollection {
                 writer.newLine();
                 // write the id of the Artist
                 writer.write(graph.ids[i]);
-                writer.newLine();
+                writer.write("@");
                 // write the index of the Artist with the id
                 writer.write(graph.IDToIndex.get(graph.ids[i]));
-                writer.newLine();
+                writer.write("@");
                 // write the artist name
                 writer.write(graph.IDToName.get(graph.ids[i]));
                 writer.newLine();
@@ -227,6 +227,10 @@ public class DataCollection {
                 writer.newLine();
                 for (String artist : graph.vertices[i]) {
                     writer.write(artist);
+                    writer.write("@");
+                    writer.write(graph.IDToIndex.get(artist));
+                    writer.write("@");
+                    writer.write(graph.IDToName.get(artist));
                     writer.newLine();
                 }
             }
