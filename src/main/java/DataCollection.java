@@ -214,7 +214,14 @@ public class DataCollection {
             for (int i = 0; i < graph.vertices.length; i++) {
                 writer.write("Artist:");
                 writer.newLine();
+                // write the id of the Artist
                 writer.write(graph.ids[i]);
+                writer.newLine();
+                // write the index of the Artist with the id
+                writer.write(graph.IDToIndex.get(graph.ids[i]));
+                writer.newLine();
+                // write the artist name
+                writer.write(graph.IDToName.get(graph.ids[i]));
                 writer.newLine();
                 writer.write("Related Artists:");
                 writer.newLine();
