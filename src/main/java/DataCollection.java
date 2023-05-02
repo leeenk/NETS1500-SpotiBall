@@ -220,7 +220,7 @@ public class DataCollection {
                 writer.write(graph.ids[i]);
                 writer.write("@");
                 // write the index of the Artist with the id
-                writer.write(graph.IDToIndex.get(graph.ids[i]));
+                writer.write("" + graph.IDToIndex.get(graph.ids[i]));
                 writer.write("@");
                 // write the artist name
                 writer.write(graph.IDToName.get(graph.ids[i]));
@@ -230,7 +230,7 @@ public class DataCollection {
                 for (String artist : graph.vertices[i]) {
                     writer.write(artist);
                     writer.write("@");
-                    writer.write(graph.IDToIndex.get(artist));
+                    writer.write("" + graph.IDToIndex.get(artist));
                     writer.write("@");
                     writer.write(graph.IDToName.get(artist));
                     writer.newLine();
