@@ -133,7 +133,7 @@ public class BFS {
                     }
                 }
             }
-            
+
         }
 
         return discovered;
