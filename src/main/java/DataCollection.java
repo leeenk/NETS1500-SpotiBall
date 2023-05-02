@@ -19,7 +19,7 @@ public class DataCollection {
     String currentArtist; // id of current artist
     HashMap<String, String> idToName; // maps each discovered artist id to artist name
 
-    //String access = "BQD0hTwsHLzeUCiplkgozYxvjJBx2z2VXYdOnoJ_5cmYSO6K6-p0WbAWJDb8c6kNVubRK29Yt910l3oSndyJsaDbff9Y5t5tvPLTFYY9hL2-3w5q4Dud";
+    //String access = ;
     SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId("516287a438c547dd9f8fc6695cbb029a")
             .setClientSecret("223e9ba4a1624f219835b9b8018dab7c")
@@ -36,15 +36,14 @@ public class DataCollection {
     public DataCollection(String startArtist, int size) {
         ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials()
                 .grant_type("client_credentials").build();
-//        try {
-//            ClientCredentials clientCredentials = clientCredentialsRequest.execute();
-//            String token = clientCredentials.getAccessToken();
-//            spotifyApi.setAccessToken(token);
-//        } catch (IOException | SpotifyWebApiException | ParseException e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
+        try {
+            ClientCredentials clientCredentials = clientCredentialsRequest.execute();
+            String token = clientCredentials.getAccessToken();
+            spotifyApi.setAccessToken(token);
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
 
-        spotifyApi.setAccessToken("BQDd68JM4EWj2v09AMrlNlLWqcQoxJhbCGD31tY66FEm_WLrj8waVPudCMW_9rfLWUeTxadguyoMgEITc4ZAUf7qsty6kh_ce-L3zI4utI3gA2refR2s");
         this.graph = new Graph(size);
         this.size = size;
         this.idToName = new HashMap<>();
@@ -83,7 +82,6 @@ public class DataCollection {
      * is selected. If no such artist is found, an IllegalArgumentException is thrown.
      * @param id The id of the artist
      * @return The id of the artist
-     */
     String getName(String id) {
         SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(id).build();
         String name = "";
@@ -104,6 +102,7 @@ public class DataCollection {
         }
         return name;
     }
+     */
 
     /**
      * Method uses Spotify API to build graph of artists. Loops through the
@@ -121,7 +120,7 @@ public class DataCollection {
             //BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"));
             Queue<String> queue = new LinkedList<>();
             queue.add(currentArtist);
-            graph.addArtist(currentArtist, 0, getName(currentArtist));
+            graph.addArtist(currentArtist, 0, idToName.get(currentArtist));
 
             int currentIndex = 1;
             while (currentIndex < size - 1  || !queue.isEmpty()) {
@@ -131,7 +130,7 @@ public class DataCollection {
                     Collection<String> artistIDs = getArtistIDs(albumID);
                     for (String artist : artistIDs) {
                         if (! graph.containsArtist(artist) && currentIndex < size) {
-                            graph.addArtist(artist, currentIndex, getName(artist));
+                            graph.addArtist(artist, currentIndex, idToName.get(artist));
                             currentIndex++;
                             queue.add(artist);
                             graph.addEdge(currentArtist, artist);
