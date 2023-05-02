@@ -18,9 +18,12 @@ public class DataCollection {
     int size; // max size of the graph
     String currentArtist; // id of current artist
     HashMap<String, String> idToName; // maps each discovered artist id to artist name
+
+    //String access = "BQD0hTwsHLzeUCiplkgozYxvjJBx2z2VXYdOnoJ_5cmYSO6K6-p0WbAWJDb8c6kNVubRK29Yt910l3oSndyJsaDbff9Y5t5tvPLTFYY9hL2-3w5q4Dud";
     SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId("516287a438c547dd9f8fc6695cbb029a")
             .setClientSecret("223e9ba4a1624f219835b9b8018dab7c")
+            //.setAccessToken(access)
             .build();
 
     /**
@@ -128,7 +131,7 @@ public class DataCollection {
         GetArtistsAlbumsRequest getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(currentArtist).build();
         Collection<String> albumIDs = new ArrayList<>();
         try {
-            Paging<AlbumSimplified> albumSimplifiedPaging = getArtistsAlbumsRequest.execute();
+            Paging<AlbumSimplified> albumSimplifiedPaging = getArtistsAlbumsRequest.execute(); // bottleneck
             for (AlbumSimplified albumSimplified : albumSimplifiedPaging.getItems()) {
                 albumIDs.add(albumSimplified.getId());
             }
