@@ -18,8 +18,6 @@ public class DataCollection {
     int size; // max size of the graph
     String currentArtist; // id of current artist
     HashMap<String, String> idToName; // maps each discovered artist id to artist name
-
-    //String access = ;
     SpotifyApi spotifyApi = new SpotifyApi.Builder()
             .setClientId("516287a438c547dd9f8fc6695cbb029a")
             .setClientSecret("223e9ba4a1624f219835b9b8018dab7c")
@@ -78,33 +76,6 @@ public class DataCollection {
     }
 
     /**
-     * Finds ID of artist by searching spotify API. First artist found with a matching name
-     * is selected. If no such artist is found, an IllegalArgumentException is thrown.
-     * @param id The id of the artist
-     * @return The id of the artist
-    String getName(String id) {
-        SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(id).build();
-        String name = "";
-        try {
-            Paging<Artist> artistSimplifiedPaging = searchArtistsRequest.execute();
-            for (Artist artist: artistSimplifiedPaging.getItems()) {
-                if (id.equals(artist.getId())) {
-                    name = artist.getName();
-                    idToName.put(id, name);
-                    break;
-                }
-            }
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        if (name.equals("")) {
-            throw new IllegalArgumentException("Artist id does not match any found artist.");
-        }
-        return name;
-    }
-     */
-
-    /**
      * Method uses Spotify API to build graph of artists. Loops through the
      * following until the number of artists discovered reaches the limiting size
      * of the graph: For the current artist, finds all of their albums, all of these
@@ -116,38 +87,26 @@ public class DataCollection {
      * edge representing a track feature (direction of feature disregarded)
      */
     public Graph buildGraph() {
-        //try {
-            //BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"));
-            Queue<String> queue = new LinkedList<>();
-            queue.add(currentArtist);
-            graph.addArtist(currentArtist, 0, idToName.get(currentArtist));
+        Queue<String> queue = new LinkedList<>();
+        queue.add(currentArtist);
+        graph.addArtist(currentArtist, 0, idToName.get(currentArtist));
 
-            int currentIndex = 1;
-            while (currentIndex < size - 1  || !queue.isEmpty()) {
-                currentArtist = queue.poll();
-                Collection<String> albumIDs = getAlbumIDs();
-                for (String albumID : albumIDs) {
-                    Collection<String> artistIDs = getArtistIDs(albumID);
-                    for (String artist : artistIDs) {
-                        if (! graph.containsArtist(artist) && currentIndex < size) {
-                            graph.addArtist(artist, currentIndex, idToName.get(artist));
-                            currentIndex++;
-                            queue.add(artist);
-                            graph.addEdge(currentArtist, artist);
-                            //writer.write(currentArtist + " " + artist);
-                            //writer.newLine();
-                            //System.out.println(currentArtist + " " + artist);
-                        }
+        int currentIndex = 1;
+        while (currentIndex < size - 1  || !queue.isEmpty()) {
+            currentArtist = queue.poll();
+            Collection<String> albumIDs = getAlbumIDs();
+            for (String albumID : albumIDs) {
+                Collection<String> artistIDs = getArtistIDs(albumID);
+                for (String artist : artistIDs) {
+                    if (! graph.containsArtist(artist) && currentIndex < size) {
+                        graph.addArtist(artist, currentIndex, idToName.get(artist));
+                        currentIndex++;
+                        queue.add(artist);
+                        graph.addEdge(currentArtist, artist);
                     }
                 }
             }
-            //writer.close();
-            //writer.flush();
-
-        //} catch (Exception e) {
-            //System.out.println("No data file found.");
-        //}
-        printGraph();
+        }
         writeGraph();
         return graph;
     }
