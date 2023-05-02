@@ -10,6 +10,9 @@ import java.util.List;
 public class BFS {
 
     Graph graph;
+    private ArrayList<String> queue;
+    private ArrayList<String> discovered;
+
 
     public BFS() {
         // create graph from data.txt
@@ -31,7 +34,10 @@ public class BFS {
             e.printStackTrace();
         }
 
-        this.graph = new Graph(count);;
+        this.graph = new Graph(count);
+        queue = new ArrayList<>();
+        discovered = new ArrayList<>();
+
     }
 
 
@@ -97,9 +103,40 @@ public class BFS {
     // static method runs BFS
     // change output type if want
     // correctly output empty list if there is no connection between the artists (given the limiting size of graph)
-    static List<String> runBFS(Graph graph, String source, String target) {
+    List<String> runBFS(String source, String target) {
+        String firstArtist = source;
+        discovered.add(source);
+        queue.add(source);
 
-        return new ArrayList<>();
+        while (queue.size() != 0) {
+
+            String temp = queue.get(0);
+            firstArtist = temp;
+
+
+            // if the queue has the friend, remove the friend from the queue /remove the first source friend from queue
+            if (discovered.contains(queue.get(0))) {
+                queue.remove(0);
+            }
+
+            /* get the friends of the current node and add the neighbors to queue & discovered, if the neighbor is
+             not discovered.
+             */
+            for (int i = 0; i < graph.vertices.length; i++) {
+                List<String> artists = graph.vertices[i];
+                for (String artist : artists) {
+                    // find only undiscovered friend neighbors
+                    if (!discovered.contains(artist)) {
+                        queue.add(artist);
+                        discovered.add(artist);
+
+                    }
+                }
+            }
+            
+        }
+
+        return discovered;
     }
 
 
