@@ -213,7 +213,7 @@ public class DataCollection {
      */
     void writeGraph() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("files/data.txt"));
             for (int i = 0; i < graph.vertices.length; i++) {
                 writer.write("Artist:");
                 writer.newLine();
