@@ -11,8 +11,6 @@ public class BFS {
 
     Graph graph;
 
-//    HashMap<String, String> IDToName;
-
     public BFS() {
         // create graph from data.txt
         BufferedReader br;
