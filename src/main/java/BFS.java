@@ -1,14 +1,108 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BFS {
+
+    Graph graph;
+
+//    HashMap<String, String> IDToName;
+
     public BFS() {
+        // create graph from data.txt
+        BufferedReader br;
+        int count = 0;
+        try {
+            br = new BufferedReader(new FileReader("files/data.txt"));
+            String line = br.readLine();
+            while (line != null) {
+                if (line.equals("Artist:")) {
+                    count++;
+                }
+                line = br.readLine();
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.graph = new Graph(count);;
     }
+
+
+    /**
+     * Method that populates a graph with the current artist and relevant artists data in data.txt
+     *
+     * @return Graph with nodes being the ids of discovered artist and an
+     * edge representing a track feature (direction of feature disregarded)
+     */
+    public void populateGraph() {
+        BufferedReader br;
+        String currArtist = "";
+        String currRelArtist = "";
+        String[] arrCurrArtist = new String[3];
+        String[] arrCurrRelArtist = new String[3];
+
+        try {
+            br = new BufferedReader(new FileReader("files/data.txt"));
+            String line = br.readLine();
+            while (line != null) {
+                if (line.equals("Artist:")) {
+                    currArtist = br.readLine();
+//                    // 0 = id, 1 = index, 2 = name
+//                    // split name-ID of currArtist by "@"
+                    arrCurrArtist = currArtist.split("@");
+//
+                    // currArtists input here should be ID
+                    if (!graph.containsArtist(arrCurrArtist[0])) {
+                        graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                    }
+                } else if (line.equals("Related Artists:")) {
+                    currRelArtist = br.readLine();
+                    arrCurrRelArtist = currRelArtist.split("@");
+
+                    while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
+                        if (!graph.containsArtist(arrCurrRelArtist[0])) {
+                            graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+                            if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
+                                graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
+                            }
+                        }
+                        currRelArtist = br.readLine();
+                    }
+                }
+
+                if (currRelArtist.equals("Artist:")) {
+                    line = currRelArtist;
+                } else {
+                    line = br.readLine();
+                }
+
+            }
+
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // static method runs BFS
     // change output type if want
     // correctly output empty list if there is no connection between the artists (given the limiting size of graph)
     static List<String> runBFS(Graph graph, String source, String target) {
+
         return new ArrayList<>();
     }
+
+
 }

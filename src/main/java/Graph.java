@@ -10,7 +10,7 @@ public class Graph {
     List<String>[] vertices;
     // maps artist id to their index in the adjacency list. data structure may not be necessary
     HashMap<String, Integer> IDToIndex;
-
+    HashMap<String, String> IDToName;
     String[] ids;
 
     /**
@@ -28,13 +28,16 @@ public class Graph {
             i++;
         }
         this.IDToIndex = new HashMap<>();
+        this.IDToName = new HashMap<>();
         this.ids = new String[n];
     }
 
-    public void addArtist(String id, int index) {
+    public void addArtist(String id, int index, String name) {
         IDToIndex.put(id, index);
         ids[index] = id;
+        IDToName.put(id, name);
     }
+
 
     public boolean containsArtist(String id) {
         return IDToIndex.containsKey(id);
