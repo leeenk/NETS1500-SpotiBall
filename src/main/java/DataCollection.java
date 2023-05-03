@@ -19,8 +19,8 @@ public class DataCollection {
     String currentArtist; // id of current artist
     HashMap<String, String> idToName; // maps each discovered artist id to artist name
     SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId("516287a438c547dd9f8fc6695cbb029a")
-            .setClientSecret("223e9ba4a1624f219835b9b8018dab7c")
+            .setClientId("4178e4fadaa84a568ff86645b5e7422e")
+            .setClientSecret("0524427f150b41b2b3dfc64da0e87e95")
             //.setAccessToken(access)
             .build();
 
