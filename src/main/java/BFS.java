@@ -9,7 +9,7 @@ public class BFS {
     Graph graph;
     private ArrayList<String> queue;
     private ArrayList<String> discovered;
-
+    private HashMap<String, Integer> NameToIndex;
     private int[] parent;
 
 
@@ -67,6 +67,7 @@ public class BFS {
                     // currArtists input here should be ID
                     if (!graph.containsArtist(arrCurrArtist[0])) {
                         graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                        NameToIndex.put(arrCurrArtist[2], Integer.parseInt(arrCurrArtist[1]));
                     }
                 } else if (line.equals("Related Artists:")) {
                     currRelArtist = br.readLine();
@@ -75,6 +76,7 @@ public class BFS {
                     while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
                         if (!graph.containsArtist(arrCurrRelArtist[0])) {
                             graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+                            NameToIndex.put(arrCurrArtist[2], Integer.parseInt(arrCurrArtist[1]));
                             if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
                                 graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
                             }
@@ -99,7 +101,7 @@ public class BFS {
         }
     }
 
-
+    
     // static method runs BFS
     // change output type if want
     // correctly output empty list if there is no connection between the artists (given the limiting size of graph)
