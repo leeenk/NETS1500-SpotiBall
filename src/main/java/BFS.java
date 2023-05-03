@@ -9,7 +9,7 @@ public class BFS {
     Graph graph;
     private ArrayList<String> queue;
     private ArrayList<String> discovered;
-    private HashMap<String, Integer> NameToIndex;
+    private HashMap<Integer, String> indexToName;
     private int[] parent;
 
 
@@ -67,7 +67,7 @@ public class BFS {
                     // currArtists input here should be ID
                     if (!graph.containsArtist(arrCurrArtist[0])) {
                         graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
-                        NameToIndex.put(arrCurrArtist[2], Integer.parseInt(arrCurrArtist[1]));
+                        indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
                     }
                 } else if (line.equals("Related Artists:")) {
                     currRelArtist = br.readLine();
@@ -76,7 +76,7 @@ public class BFS {
                     while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
                         if (!graph.containsArtist(arrCurrRelArtist[0])) {
                             graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
-                            NameToIndex.put(arrCurrArtist[2], Integer.parseInt(arrCurrArtist[1]));
+                            indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
                             if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
                                 graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
                             }
@@ -155,10 +155,10 @@ public class BFS {
             }
         }
         int currIndex = startingIndex;
-        finalPath.add(target);
         while (currIndex != endingIndex) {
             //finalPath.add(graph.)
             //updating parent
+            finalPath.add(indexToName.get(currIndex));
             currIndex = parent[currIndex];
         }
 
@@ -166,6 +166,5 @@ public class BFS {
         return finalPath;
 
     }
-
 
 }
