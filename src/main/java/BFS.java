@@ -2,10 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class BFS {
 
@@ -106,7 +103,7 @@ public class BFS {
     // static method runs BFS
     // change output type if want
     // correctly output empty list if there is no connection between the artists (given the limiting size of graph)
-    public void runBFS(String source, String target) {
+    public LinkedList<String> runBFS(String source, String target) {
         String firstArtist = source;
         discovered.add(source);
         queue.add(source);
@@ -138,7 +135,31 @@ public class BFS {
                 }
             }
         }
+        LinkedList<String> finalPath = new LinkedList<>();
         // traversing through parent array
+        // have to get id of name
+        int startingIndex = 0;
+        int endingIndex = 0;
+        for (Map.Entry<String, String> entry: graph.IDToName.entrySet()) {
+            if (entry.getValue().equals(source)) {
+                String firstArtistID = entry.getKey();
+                endingIndex = graph.IDToIndex.get(firstArtistID);
+            }
+            if (entry.getValue().equals(target)) {
+                String lastArtistID = entry.getKey();
+                startingIndex = graph.IDToIndex.get(lastArtistID);
+            }
+        }
+        int currIndex = startingIndex;
+        finalPath.add(target);
+        while (currIndex != endingIndex) {
+            //finalPath.add(graph.)
+            //updating parent
+            parent[currIndex] = currIndex;
+        }
+
+        Collections.reverse(finalPath);
+        return finalPath;
 
     }
 

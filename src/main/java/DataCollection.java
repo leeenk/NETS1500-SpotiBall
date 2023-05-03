@@ -19,8 +19,8 @@ public class DataCollection {
     String currentArtist; // id of current artist
     HashMap<String, String> idToName; // maps each discovered artist id to artist name
     SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId("4178e4fadaa84a568ff86645b5e7422e")
-            .setClientSecret("0524427f150b41b2b3dfc64da0e87e95")
+            .setClientId("516287a438c547dd9f8fc6695cbb029a")
+            .setClientSecret("223e9ba4a1624f219835b9b8018dab7c")
             //.setAccessToken(access)
             .build();
 
@@ -95,15 +95,18 @@ public class DataCollection {
         while (currentIndex < size - 1  || !queue.isEmpty()) {
             currentArtist = queue.poll();
             Collection<String> albumIDs = getAlbumIDs();
+            Collection<String> relatedArtists = new ArrayList<>();
             for (String albumID : albumIDs) {
-                Collection<String> artistIDs = getArtistIDs(albumID);
-                for (String artist : artistIDs) {
-                    if (! graph.containsArtist(artist) && currentIndex < size) {
-                        graph.addArtist(artist, currentIndex, idToName.get(artist));
-                        currentIndex++;
-                        queue.add(artist);
-                        graph.addEdge(currentArtist, artist);
-                    }
+                relatedArtists.addAll(getArtistIDs(albumID));
+            }
+            for (String artist : relatedArtists) {
+                if (graph.containsArtist(artist)) {
+                    graph.addEdge(currentArtist, artist);
+                } else if (! graph.containsArtist(artist) && currentIndex < size) {
+                    graph.addArtist(artist, currentIndex, idToName.get(artist));
+                    currentIndex++;
+                    queue.add(artist);
+                    graph.addEdge(currentArtist, artist);
                 }
             }
         }
