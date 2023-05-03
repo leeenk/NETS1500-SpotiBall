@@ -37,7 +37,7 @@ public class BFS {
         queue = new ArrayList<>();
         discovered = new ArrayList<>();
         parent = new int[count];
-
+        indexToName = new HashMap<>();
     }
 
 
