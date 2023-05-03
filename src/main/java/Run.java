@@ -12,10 +12,11 @@ public class Run {
 
     // present list o user (correctly display that no connection exists if returned list is empty)
     public static void main(final String[] args) {
-        final JFrame parent = new JFrame();
+        final JFrame parent = new JFrame("SpotiBall");
         JButton button = new JButton();
 
-        button.setText("Welcome to Spotiball! CLick to Begin.");
+        parent.setLocation(200, 200);
+        button.setText("Welcome to Spotiball! Click to Begin.");
         parent.add(button);
         parent.pack();
         parent.setVisible(true);
