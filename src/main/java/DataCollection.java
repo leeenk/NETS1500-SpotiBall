@@ -39,7 +39,7 @@ public class DataCollection {
             String token = clientCredentials.getAccessToken();
             spotifyApi.setAccessToken(token);
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error with getting access token.");
         }
 
         this.graph = new Graph(size);
@@ -115,15 +115,16 @@ public class DataCollection {
      * @return Collection of all the album ids of the current artist
      */
     Collection<String> getAlbumIDs() {
-        GetArtistsAlbumsRequest getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(currentArtist).build();
+        GetArtistsAlbumsRequest getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(currentArtist)
+                                                                    .build();
         Collection<String> albumIDs = new ArrayList<>();
         try {
-            Paging<AlbumSimplified> albumSimplifiedPaging = getArtistsAlbumsRequest.execute(); // bottleneck
+            Paging<AlbumSimplified> albumSimplifiedPaging = getArtistsAlbumsRequest.execute();
             for (AlbumSimplified albumSimplified : albumSimplifiedPaging.getItems()) {
                 albumIDs.add(albumSimplified.getId());
             }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
+            return albumIDs;
         }
         return albumIDs;
     }
@@ -148,7 +149,7 @@ public class DataCollection {
                 }
             }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
+            return artistIDs;
         }
         return artistIDs;
     }
@@ -195,8 +196,8 @@ public class DataCollection {
                     writer.newLine();
                 }
             }
-            writer.close();
             writer.flush();
+            writer.close();
         } catch (Exception e) {
             System.out.println("No data file found.");
         }
