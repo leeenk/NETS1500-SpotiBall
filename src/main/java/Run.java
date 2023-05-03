@@ -28,6 +28,7 @@ public class Run {
                 String nameTwo = JOptionPane.showInputDialog(parent,
                         "Enter Second Artist: ", null);
             }
+            // traverse parent array and output path associated with the two artists
         });
     }
 

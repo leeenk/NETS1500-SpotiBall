@@ -13,6 +13,8 @@ public class BFS {
     private ArrayList<String> queue;
     private ArrayList<String> discovered;
 
+    private int[] parent;
+
 
     public BFS() {
         // create graph from data.txt
@@ -37,6 +39,7 @@ public class BFS {
         this.graph = new Graph(count);
         queue = new ArrayList<>();
         discovered = new ArrayList<>();
+        parent = new int[count];
 
     }
 
@@ -103,7 +106,7 @@ public class BFS {
     // static method runs BFS
     // change output type if want
     // correctly output empty list if there is no connection between the artists (given the limiting size of graph)
-    List<String> runBFS(String source, String target) {
+    public void runBFS(String source, String target) {
         String firstArtist = source;
         discovered.add(source);
         queue.add(source);
@@ -129,14 +132,16 @@ public class BFS {
                     if (!discovered.contains(artist)) {
                         queue.add(artist);
                         discovered.add(artist);
-
+                        // need index of related artist
+                        parent[graph.IDToIndex.get(artist)] = graph.IDToIndex.get(temp);
                     }
                 }
             }
-
         }
+        // traversing through parent array
 
-        return discovered;
+
+
     }
 
 

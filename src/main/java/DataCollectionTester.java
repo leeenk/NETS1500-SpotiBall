@@ -7,8 +7,8 @@ public class DataCollectionTester {
 
         // in BFS, download the graph data from the file
 
-        //BFS bfs = new BFS();
-        //bfs.populateGraph();
+        // BFS bfs = new BFS();
+        // bfs.populateGraph();
     }
 
 }
