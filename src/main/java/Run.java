@@ -16,10 +16,22 @@ public class Run {
         JButton button = new JButton();
 
         parent.setLocation(200, 200);
-        button.setText("Welcome to Spotiball! Click to Begin.");
+        String text = "Welcome to Spotiball! Click to Begin." +
+                "" +
+                "" +
+                "<h1 style=\\\"text-align: center;\\\"><strong>SpotiBall Instructions\" +\n" +
+                "                \"</strong></h1>\\n\" +\n" +
+                "                \"<p>&nbsp;</p>\\n\" +\n" +
+                "                \"<h4 style=\\\"text-align: center;\\\">Type in one artist and click next. " +
+                "                       Do the same for the second artist!</h4>";
+        button.setText(text);
         parent.add(button);
         parent.pack();
         parent.setVisible(true);
+
+        // populate BFS and output ArrayList
+        // BFS bfs = new BFS();
+        // bfs.populateGraph();
 
         button.addActionListener(new java.awt.event.ActionListener() {
             @Override
