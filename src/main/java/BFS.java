@@ -158,7 +158,6 @@ public class BFS {
             parent[currIndex] = currIndex;
         }
 
-
         Collections.reverse(finalPath);
         return finalPath;
 
