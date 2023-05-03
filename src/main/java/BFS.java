@@ -18,7 +18,7 @@ public class BFS {
         BufferedReader br;
         int count = 0;
         try {
-            br = new BufferedReader(new FileReader("files/data.txt"));
+            br = new BufferedReader(new FileReader("testing.txt"));
             String line = br.readLine();
             while (line != null) {
                 if (line.equals("Artist:")) {
@@ -55,52 +55,86 @@ public class BFS {
         String[] arrCurrRelArtist = new String[3];
 
         try {
-            br = new BufferedReader(new FileReader("files/data.txt"));
+            String tempArtist = "";
+            br = new BufferedReader(new FileReader("testing.txt"));
             String line = br.readLine();
             while (line != null) {
                 if (line.equals("Artist:")) {
-                    currArtist = br.readLine();
-//                    // 0 = id, 1 = index, 2 = name
-//                    // split name-ID of currArtist by "@"
-                    arrCurrArtist = currArtist.split("@");
-//
-                    // currArtists input here should be ID
-                    if (!graph.containsArtist(arrCurrArtist[0])) {
-                        graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
-                        indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
-                    }
-                } else if (line.equals("Related Artists:")) {
-                    currRelArtist = br.readLine();
-                    arrCurrRelArtist = currRelArtist.split("@");
+                    // if currArtist = past artist that appeared in related artists,
+                    // don't set the next line, as it is "Related Artists", but just read the line
+                    // and set the next line to currRelArtist
+                    if (tempArtist.equals(currArtist)) {
+                        br.readLine();
+                        addRelatedArtists(br, currRelArtist, arrCurrRelArtist, arrCurrArtist);
+                    } else {
+                        // else:
+                        currArtist = br.readLine();
+                        tempArtist = currArtist;
+                        // 0 = id, 1 = index, 2 = name
+                        // split name-ID of currArtist by "@"
+                        arrCurrArtist = currArtist.split("@");
 
-                    while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
-                        if (!graph.containsArtist(arrCurrRelArtist[0])) {
-                            graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+                        // currArtists input here should be ID
+                        if (!graph.containsArtist(arrCurrArtist[0])) {
+                            graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                            System.out.print(Integer.parseInt(arrCurrArtist[1]));
                             indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
-                            if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
-                                graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
-                            }
                         }
-                        currRelArtist = br.readLine();
                     }
-                }
 
-                if (currRelArtist.equals("Artist:")) {
-                    line = currRelArtist;
-                } else {
-                    line = br.readLine();
-                }
+                    if (line.equals("Related Artists:")) {
+                        addRelatedArtists(br, currRelArtist, arrCurrRelArtist, arrCurrArtist);
+//                        currRelArtist = br.readLine();
+//                        arrCurrRelArtist = currRelArtist.split("@");
+//
+//                        while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
+//                            if (!graph.containsArtist(arrCurrRelArtist[0])) {
+//                                graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+//                                indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+//                                if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
+//                                    graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
+//                                }
+//                            }
+//                            currRelArtist = br.readLine();
+//                        }
+                    }
 
+                    // updating the while loop
+                    if (currRelArtist.equals("Artist:")) {
+                        line = currRelArtist;
+
+                    } else {
+                        line = br.readLine();
+                    }
+
+                }
             }
 
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+                br.close();
+            } catch(FileNotFoundException e){
+                e.printStackTrace();
+            } catch(IOException e){
+                e.printStackTrace();
+            }
 
+        }
+
+
+        public void addRelatedArtists(BufferedReader br, String currRelArtist, String[] arrCurrRelArtist, String[] arrCurrArtist) throws IOException {
+            currRelArtist = br.readLine();
+            arrCurrRelArtist = currRelArtist.split("@");
+
+            while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
+                if (!graph.containsArtist(arrCurrRelArtist[0])) {
+                    graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+                    indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                    if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
+                        graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
+                    }
+                }
+                currRelArtist = br.readLine();
+            }
+        }
     
     // static method runs BFS
     // change output type if want
@@ -168,3 +202,4 @@ public class BFS {
     }
 
 }
+

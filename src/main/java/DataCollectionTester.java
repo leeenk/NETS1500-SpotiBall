@@ -12,9 +12,9 @@ public class DataCollectionTester {
         BFS bfs = new BFS();
         bfs.populateGraph();
         LinkedList<String> list = bfs.runBFS("Pitbull", "Ive Queen");
-        for (String s : list) {
-            System.out.println(s);
-        }
+//        for (String s : list) {
+//            System.out.println(s);
+//        }
     }
 
 }
