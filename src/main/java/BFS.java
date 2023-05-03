@@ -142,7 +142,9 @@ public class BFS {
         int endingIndex = 0;
         for (Map.Entry<String, String> entry: graph.IDToName.entrySet()) {
             if (entry.getValue().equals(source)) {
+                // getting ID of source
                 String firstArtistID = entry.getKey();
+                // getting ID of source
                 endingIndex = graph.IDToIndex.get(firstArtistID);
             }
             if (entry.getValue().equals(target)) {
@@ -155,7 +157,7 @@ public class BFS {
         while (currIndex != endingIndex) {
             //finalPath.add(graph.)
             //updating parent
-            parent[currIndex] = currIndex;
+            currIndex = parent[currIndex];
         }
 
         Collections.reverse(finalPath);
