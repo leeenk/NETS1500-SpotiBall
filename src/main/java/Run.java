@@ -1,6 +1,9 @@
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.util.LinkedList;
+
 public class Run {
 
     // presents UI to user - store artist1, artist2
@@ -16,22 +19,16 @@ public class Run {
         JButton button = new JButton();
 
         parent.setLocation(200, 200);
-        String text = "Welcome to Spotiball! Click to Begin." +
-                "" +
-                "" +
-                "<h1 style=\\\"text-align: center;\\\"><strong>SpotiBall Instructions\" +\n" +
-                "                \"</strong></h1>\\n\" +\n" +
-                "                \"<p>&nbsp;</p>\\n\" +\n" +
-                "                \"<h4 style=\\\"text-align: center;\\\">Type in one artist and click next. " +
-                "                       Do the same for the second artist!</h4>";
+        String text = "Welcome to Spotiball! Click to Begin.";
         button.setText(text);
         parent.add(button);
         parent.pack();
         parent.setVisible(true);
 
         // populate BFS and output ArrayList
-        // BFS bfs = new BFS();
-        // bfs.populateGraph();
+        BFS bfs = new BFS();
+        bfs.populateGraph();
+
 
         button.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -40,9 +37,18 @@ public class Run {
                         "Enter First Artist: ", null);
                 String nameTwo = JOptionPane.showInputDialog(parent,
                         "Enter Second Artist: ", null);
+                BFS bfs = new BFS();
+                bfs.populateGraph();
+                LinkedList<String> list = bfs.runBFS(name, nameTwo);
+                String finalList = "";
+                for (String indName: list) {
+                    finalList = finalList + ", indName";
+                }
+                JOptionPane.showMessageDialog(parent, finalList);
             }
             // traverse parent array and output path associated with the two artists
         });
+
     }
 
 }
