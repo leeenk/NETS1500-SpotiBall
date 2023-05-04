@@ -11,7 +11,10 @@ public class Graph {
     // maps artist id to their index in the adjacency list. data structure may not be necessary
     HashMap<String, Integer> IDToIndex;
     HashMap<String, String> IDToName;
+    HashMap<String, String> nameToID;
     String[] ids;
+
+    int size;
 
     /**
      * Constructor for graph object.
@@ -27,8 +30,10 @@ public class Graph {
             vertices[i] = new LinkedList<>();
             i++;
         }
+        this.size = n;
         this.IDToIndex = new HashMap<>();
         this.IDToName = new HashMap<>();
+        this.nameToID = new HashMap<>();
         this.ids = new String[n];
     }
 
@@ -36,6 +41,7 @@ public class Graph {
         IDToIndex.put(id, index);
         ids[index] = id;
         IDToName.put(id, name);
+        nameToID.put(name, id);
     }
 
 

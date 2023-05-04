@@ -3,6 +3,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Run {
 
@@ -34,10 +35,10 @@ public class Run {
                         "Enter Second Artist: ", null);
                 BFS bfs = new BFS();
                 bfs.populateGraph();
-                LinkedList<String> list = bfs.runBFS(name, nameTwo);
+                List<String> list = bfs.run(name, nameTwo);
                 String finalList = "";
                 for (String indName: list) {
-                    finalList = finalList + ", indName";
+                    finalList = finalList + indName + " ";
                 }
                 JOptionPane.showMessageDialog(parent, finalList);
             }
