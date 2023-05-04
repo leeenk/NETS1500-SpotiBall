@@ -1,6 +1,9 @@
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.util.LinkedList;
+
 public class Run {
 
     // presents UI to user - store artist1, artist2
@@ -12,10 +15,12 @@ public class Run {
 
     // present list o user (correctly display that no connection exists if returned list is empty)
     public static void main(final String[] args) {
-        final JFrame parent = new JFrame();
+        final JFrame parent = new JFrame("SpotiBall");
         JButton button = new JButton();
 
-        button.setText("Welcome to Spotiball! CLick to Begin.");
+        parent.setLocation(200, 200);
+        String text = "Welcome to Spotiball! Click to Begin.";
+        button.setText(text);
         parent.add(button);
         parent.pack();
         parent.setVisible(true);
@@ -27,9 +32,18 @@ public class Run {
                         "Enter First Artist: ", null);
                 String nameTwo = JOptionPane.showInputDialog(parent,
                         "Enter Second Artist: ", null);
+                BFS bfs = new BFS();
+                bfs.populateGraph();
+                LinkedList<String> list = bfs.runBFS(name, nameTwo);
+                String finalList = "";
+                for (String indName: list) {
+                    finalList = finalList + ", indName";
+                }
+                JOptionPane.showMessageDialog(parent, finalList);
             }
             // traverse parent array and output path associated with the two artists
         });
+
     }
 
 }

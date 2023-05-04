@@ -1,6 +1,5 @@
 README SPOTIBALL:
 
-
 User Manual:
 Welcome to Spotiball! Inspired by Pitbull number, we decided to parse Spotify's API to be able to get the
 degree of separation or two artists (and the artists on this path relating them). Artists are related through

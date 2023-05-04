@@ -2,16 +2,17 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class BFS {
 
     Graph graph;
     private ArrayList<String> queue;
     private ArrayList<String> discovered;
+<<<<<<< HEAD
+=======
+    private HashMap<Integer, String> indexToName;
+>>>>>>> 3528cbef9522885d2600956f510a7e8240c236e0
     private int[] parent;
 
     public BFS() {
@@ -19,7 +20,7 @@ public class BFS {
         BufferedReader br;
         int count = 0;
         try {
-            br = new BufferedReader(new FileReader("files/data.txt"));
+            br = new BufferedReader(new FileReader("testing.txt"));
             String line = br.readLine();
             while (line != null) {
                 if (line.equals("Artist:")) {
@@ -37,6 +38,10 @@ public class BFS {
         queue = new ArrayList<>();
         discovered = new ArrayList<>();
         parent = new int[count];
+<<<<<<< HEAD
+=======
+        indexToName = new HashMap<>();
+>>>>>>> 3528cbef9522885d2600956f510a7e8240c236e0
     }
 
 
@@ -48,6 +53,7 @@ public class BFS {
      */
     public void populateGraph() {
         try {
+<<<<<<< HEAD
             BufferedReader br = new BufferedReader(new FileReader("files/data.txt"));
             String currArtist = br.readLine();
             while (currArtist != null) {
@@ -75,14 +81,93 @@ public class BFS {
             br.close();
         }  catch (IOException e) {
             e.printStackTrace();
+=======
+            String tempArtist = "";
+            br = new BufferedReader(new FileReader("testing.txt"));
+            String line = br.readLine();
+            while (line != null) {
+                if (line.equals("Artist:")) {
+                    // if currArtist = past artist that appeared in related artists,
+                    // don't set the next line, as it is "Related Artists", but just read the line
+                    // and set the next line to currRelArtist
+                    if (tempArtist.equals(currArtist)) {
+                        br.readLine();
+                        addRelatedArtists(br, currRelArtist, arrCurrRelArtist, arrCurrArtist);
+                    } else {
+                        // else:
+                        currArtist = br.readLine();
+                        tempArtist = currArtist;
+                        // 0 = id, 1 = index, 2 = name
+                        // split name-ID of currArtist by "@"
+                        arrCurrArtist = currArtist.split("@");
+
+                        // currArtists input here should be ID
+                        if (!graph.containsArtist(arrCurrArtist[0])) {
+                            graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                            System.out.print(Integer.parseInt(arrCurrArtist[1]));
+                            indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                        }
+                    }
+
+                    if (line.equals("Related Artists:")) {
+                        addRelatedArtists(br, currRelArtist, arrCurrRelArtist, arrCurrArtist);
+//                        currRelArtist = br.readLine();
+//                        arrCurrRelArtist = currRelArtist.split("@");
+//
+//                        while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
+//                            if (!graph.containsArtist(arrCurrRelArtist[0])) {
+//                                graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+//                                indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+//                                if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
+//                                    graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
+//                                }
+//                            }
+//                            currRelArtist = br.readLine();
+//                        }
+                    }
+
+                    // updating the while loop
+                    if (currRelArtist.equals("Artist:")) {
+                        line = currRelArtist;
+
+                    } else {
+                        line = br.readLine();
+                    }
+
+                }
+            }
+
+                br.close();
+            } catch(FileNotFoundException e){
+                e.printStackTrace();
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+
+>>>>>>> 3528cbef9522885d2600956f510a7e8240c236e0
         }
-    }
 
 
+        public void addRelatedArtists(BufferedReader br, String currRelArtist, String[] arrCurrRelArtist, String[] arrCurrArtist) throws IOException {
+            currRelArtist = br.readLine();
+            arrCurrRelArtist = currRelArtist.split("@");
+
+            while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
+                if (!graph.containsArtist(arrCurrRelArtist[0])) {
+                    graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+                    indexToName.put(Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                    if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
+                        graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
+                    }
+                }
+                currRelArtist = br.readLine();
+            }
+        }
+    
     // static method runs BFS
     // change output type if want
     // correctly output empty list if there is no connection between the artists (given the limiting size of graph)
-    public void runBFS(String source, String target) {
+    public LinkedList<String> runBFS(String source, String target) {
         String firstArtist = source;
         discovered.add(source);
         queue.add(source);
@@ -114,11 +199,35 @@ public class BFS {
                 }
             }
         }
+        LinkedList<String> finalPath = new LinkedList<>();
         // traversing through parent array
+        // have to get id of name
+        int startingIndex = 0;
+        int endingIndex = 0;
+        for (Map.Entry<String, String> entry: graph.IDToName.entrySet()) {
+            if (entry.getValue().equals(source)) {
+                // getting ID of source
+                String firstArtistID = entry.getKey();
+                // getting ID of source
+                endingIndex = graph.IDToIndex.get(firstArtistID);
+            }
+            if (entry.getValue().equals(target)) {
+                String lastArtistID = entry.getKey();
+                startingIndex = graph.IDToIndex.get(lastArtistID);
+            }
+        }
+        int currIndex = startingIndex;
+        while (currIndex != endingIndex) {
+            //finalPath.add(graph.)
+            //updating parent
+            finalPath.add(indexToName.get(currIndex));
+            currIndex = parent[currIndex];
+        }
 
-
+        Collections.reverse(finalPath);
+        return finalPath;
 
     }
 
-
 }
+
