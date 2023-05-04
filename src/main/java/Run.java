@@ -27,8 +27,11 @@ public class Run {
                 bfs.populateGraph();
                 List<String> list = bfs.run(name, nameTwo);
                 String finalList = "";
-                for (String indName: list) {
-                    finalList = finalList + indName + " ";
+                for (int i = 0; i < list.size(); i++) {
+                    finalList = list.get(0);
+                }
+                for (int i = 1; i < list.size(); i++) {
+                    finalList = finalList + " -> " + list.get(i);
                 }
                 JOptionPane.showMessageDialog(parent, finalList);
             }
