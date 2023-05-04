@@ -7,10 +7,6 @@ import java.util.*;
 public class BFS {
 
     Graph graph;
-    private ArrayList<String> queue;
-    private ArrayList<String> discovered;
-    private HashMap<Integer, String> indexToName;
-    private int[] parent;
 
     public BFS() {
         // create graph from data.txt
@@ -32,10 +28,6 @@ public class BFS {
             e.printStackTrace();
         }
         this.graph = new Graph(count);
-        queue = new ArrayList<>();
-        discovered = new ArrayList<>();
-        parent = new int[count];
-        indexToName = new HashMap<>();
     }
 
 
@@ -51,8 +43,8 @@ public class BFS {
             String currArtist = br.readLine();
             while (currArtist != null) {
                 currArtist = br.readLine();
-//               // 0 = id, 1 = index, 2 = name
-//               // split name-ID of currArtist by "@"
+               // 0 = id, 1 = index, 2 = name
+               // split name-ID of currArtist by "@"
                 String[] arrCurrArtist = currArtist.split("@");
                 // currArtists input here should be ID
                 if (!graph.containsArtist(arrCurrArtist[0])) {
