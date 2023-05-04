@@ -12,9 +12,7 @@ public class BFS {
     Graph graph;
     private ArrayList<String> queue;
     private ArrayList<String> discovered;
-
     private int[] parent;
-
 
     public BFS() {
         // create graph from data.txt
@@ -35,12 +33,10 @@ public class BFS {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         this.graph = new Graph(count);
         queue = new ArrayList<>();
         discovered = new ArrayList<>();
         parent = new int[count];
-
     }
 
 
@@ -51,53 +47,33 @@ public class BFS {
      * edge representing a track feature (direction of feature disregarded)
      */
     public void populateGraph() {
-        BufferedReader br;
-        String currArtist = "";
-        String currRelArtist = "";
-        String[] arrCurrArtist = new String[3];
-        String[] arrCurrRelArtist = new String[3];
-
         try {
-            br = new BufferedReader(new FileReader("files/data.txt"));
-            String line = br.readLine();
-            while (line != null) {
-                if (line.equals("Artist:")) {
-                    currArtist = br.readLine();
-//                    // 0 = id, 1 = index, 2 = name
-//                    // split name-ID of currArtist by "@"
-                    arrCurrArtist = currArtist.split("@");
-//
-                    // currArtists input here should be ID
-                    if (!graph.containsArtist(arrCurrArtist[0])) {
-                        graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+            BufferedReader br = new BufferedReader(new FileReader("files/data.txt"));
+            String currArtist = br.readLine();
+            while (currArtist != null) {
+                currArtist = br.readLine();
+//               // 0 = id, 1 = index, 2 = name
+//               // split name-ID of currArtist by "@"
+                String[] arrCurrArtist = currArtist.split("@");
+                // currArtists input here should be ID
+                if (!graph.containsArtist(arrCurrArtist[0])) {
+                    graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                }
+                br.readLine(); // reads related artist line
+                String currRelArtist = br.readLine();
+                while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
+                    String[] arrCurrRelArtist = currRelArtist.split("@");
+                    if (!graph.containsArtist(arrCurrRelArtist[0])) {
+                        graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
                     }
-                } else if (line.equals("Related Artists:")) {
+                    if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
+                        graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
+                    }
                     currRelArtist = br.readLine();
-                    arrCurrRelArtist = currRelArtist.split("@");
-
-                    while (!currRelArtist.equals("Artist:") && currRelArtist != null) {
-                        if (!graph.containsArtist(arrCurrRelArtist[0])) {
-                            graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
-                            if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
-                                graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
-                            }
-                        }
-                        currRelArtist = br.readLine();
-                    }
                 }
-
-                if (currRelArtist.equals("Artist:")) {
-                    line = currRelArtist;
-                } else {
-                    line = br.readLine();
-                }
-
             }
-
             br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
     }
