@@ -1,19 +1,16 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class BFS {
-
     Graph graph;
-    private ArrayList<String> queue;
-    private ArrayList<String> discovered;
-    private HashMap<Integer, String> indexToName;
-    private int[] parent;
 
+    /**
+     * Initializes the graph of artists by reading the data file and finding
+     * the number of artists in the graph.
+     */
     public BFS() {
-        // create graph from data.txt
         BufferedReader br;
         int count = 0;
         try {
@@ -26,24 +23,15 @@ public class BFS {
                 line = br.readLine();
             }
             br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         this.graph = new Graph(count);
-        queue = new ArrayList<>();
-        discovered = new ArrayList<>();
-        parent = new int[count];
-        indexToName = new HashMap<>();
     }
 
 
     /**
      * Method that populates a graph with the current artist and relevant artists data in data.txt
-     *
-     * @return Graph with nodes being the ids of discovered artist and an
-     * edge representing a track feature (direction of feature disregarded)
      */
     public void populateGraph() {
         try {
@@ -56,14 +44,16 @@ public class BFS {
                 String[] arrCurrArtist = currArtist.split("@");
                 // currArtists input here should be ID
                 if (!graph.containsArtist(arrCurrArtist[0])) {
-                    graph.addArtist(arrCurrArtist[0], Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
+                    graph.addArtist(arrCurrArtist[0],
+                            Integer.parseInt(arrCurrArtist[1]), arrCurrArtist[2]);
                 }
                 br.readLine(); // reads related artist line
                 String currRelArtist = br.readLine();
                 while (!currRelArtist.equals("Artist:")) {
                     String[] arrCurrRelArtist = currRelArtist.split("@");
                     if (!graph.containsArtist(arrCurrRelArtist[0])) {
-                        graph.addArtist(arrCurrRelArtist[0], Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
+                        graph.addArtist(arrCurrRelArtist[0],
+                                Integer.parseInt(arrCurrRelArtist[1]), arrCurrRelArtist[2]);
                     }
                     if (!graph.hasEdge(arrCurrArtist[0], arrCurrRelArtist[0])) {
                         graph.addEdge(arrCurrArtist[0], arrCurrRelArtist[0]);
@@ -81,7 +71,26 @@ public class BFS {
         }
     }
 
-    // source is given as ID
+    /**
+     * Finds the path from one artist to another by calling helper methods.
+     * @param source the first name inputted by user
+     * @param target the second name inputted by user
+     * @return a list that represents the path from the source artist to the target artist
+     */
+    public List<String> run(String source, String target) {
+        String sourceID = graph.nameToID.get(source);
+        String targetID = graph.nameToID.get(target);
+        int sourceIndex = graph.IDToIndex.get(sourceID);
+        int targetIndex = graph.IDToIndex.get(targetID);
+        int[] parentArray = findParentArray(sourceID);
+        return pathFinder(parentArray, targetIndex, sourceIndex);
+    }
+
+    /**
+     * Method runs BFS on populated graph
+     * @param source ID of source artist
+     * @return parent array
+     */
     int[] findParentArray(String source) {
         int n = graph.size;
         boolean[] discovered = new boolean[n];
@@ -110,16 +119,13 @@ public class BFS {
         return parent;
     }
 
-    public List<String> run(String source, String target) {
-        String sourceID = graph.nameToID.get(source);
-        String targetID = graph.nameToID.get(target);
-        int sourceIndex = graph.IDToIndex.get(sourceID);
-        int targetIndex = graph.IDToIndex.get(targetID);
-        int[] parentArray = findParentArray(sourceID);
-        List<String> path = pathFinder(parentArray, targetIndex, sourceIndex);
-        return path;
-    }
-
+    /**
+     * backtracks through parents array
+     * @param parents parent array outputted by BFS run
+     * @param t index of target artist
+     * @param s index of source artist
+     * @return list of names of artists that represents the path from source to target artist
+     */
     List<String> pathFinder(int[] parents, int t, int s) {
         ArrayList<String> path = new ArrayList<>();
         String id = graph.ids[t];

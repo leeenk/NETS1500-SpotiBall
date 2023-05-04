@@ -2,19 +2,9 @@
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Run {
-
-    // presents UI to user - store artist1, artist2
-
-    // create instance of Data Collection, initialized to artist 1 (initially pitbull) and desired limiting size
-    // run buildGraph method to output created graph
-
-    // Run BFS with graph, artist1 as source, artist2 as target
-
-    // present list o user (correctly display that no connection exists if returned list is empty)
     public static void main(final String[] args) {
         final JFrame parent = new JFrame("SpotiBall");
         JButton button = new JButton();
@@ -42,7 +32,6 @@ public class Run {
                 }
                 JOptionPane.showMessageDialog(parent, finalList);
             }
-            // traverse parent array and output path associated with the two artists
         });
 
     }

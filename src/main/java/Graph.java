@@ -6,7 +6,6 @@ import java.util.List;
  * Contains API for undirected graph.
  */
 public class Graph {
-
     List<String>[] vertices;
     // maps artist id to their index in the adjacency list. data structure may not be necessary
     HashMap<String, Integer> IDToIndex;
@@ -61,7 +60,7 @@ public class Graph {
         return relatedArtists.contains(v);
     }
 
-    // adds undireced edge to graph between two artists
+    // adds undirected edge to graph between two artists
     public boolean addEdge(String artist1, String artist2) {
         if (hasEdge(artist1, artist2)) {
             return false;
