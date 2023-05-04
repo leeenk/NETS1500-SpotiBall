@@ -1,0 +1,39 @@
+README SPOTIBALL:
+
+User Manual:
+Welcome to Spotiball! Inspired by Pitbull number, we decided to parse Spotify's API to be able to get the
+degree of separation between two artists (and the artists on this path relating them). Artists are related through
+features on tracks.
+Since parsing the Spotify API and building a graph from it can take an extremely long amount of time with
+large data sets, we decided that we would build a graph fo size 1000 and write this graph to a file, which we could
+store and then read from to run BFS on it. This is so that when the user is running the program, the program
+won't take an hour to run as the graph is already built in the presaved file. Therefore, if the two artists
+that you want to find the degree of separation of are in this 1000 size graph, then you can use this program.
+Unfortunately, otherwise we can't find the degree of separation because if we tried it would take an hour + time to
+run. Sorry there are these limitations! But artists are more closely related than they seem, and we used an artist
+Snoop Dogg that has featured lots of other artists.
+To run this application, run the Run file, and then input the two artists that you want to find the degree
+of separation of. If they are both in the graph then great we will output the path of artists are you are done!
+Otherwise, if they are not, the application will abort.
+
+Summary of this Project:
+Concepts:
+Graph algorithms: Find the Spotify artists graph and run BFS.
+Social Networks: We will be constructing the graph so that if artist A is featured in artist B’s song, then there is an edge from artist B to artist A in the graph.
+
+Work Breakdown:
+Sofia worked on Data Collection and Graph and Na and Nancy collaborated
+and worked on the BFS and GUI part together. All three of us did this summary.txt.
+
+Descriptions of what each file does:
+DataCollection: This file parses Spotify's API by using Client Credentials and then builds the
+graph using the graph class. It then writes the graph to the data.txt file that will be used in BFS.
+
+Graph: This file represents an undirected graph and has methods such as addArtist, containsArtist,
+hasEdge, and addEdge. Therefore, we use these methods to build a graph in DataCollection an BFS (when
+we are rebuilding the graph from data.txt).
+
+BFS: This file reads in data.txt and populates a graph from the txt file, then runs BFS on this graph
+which finds the shortest path from the first artist to the second artist.
+
+Run: This file contains the main method which gives a pop up window for the user to run the application.
