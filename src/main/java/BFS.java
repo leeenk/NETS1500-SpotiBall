@@ -39,8 +39,8 @@ public class BFS {
             String currArtist = br.readLine();
             while (currArtist != null) {
                 currArtist = br.readLine();
-//               // 0 = id, 1 = index, 2 = name
-//               // split name-ID of currArtist by "@"
+               // 0 = id, 1 = index, 2 = name
+               // split name-ID of currArtist by "@"
                 String[] arrCurrArtist = currArtist.split("@");
                 // currArtists input here should be ID
                 if (!graph.containsArtist(arrCurrArtist[0])) {
